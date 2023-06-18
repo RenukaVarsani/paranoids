@@ -4,9 +4,7 @@ const sequelize = new Sequelize('postgres', process.env.user, process.env.passwo
   host: 'localhost',
   dialect: 'postgres',
   operatorsAliases:0,
-  define:{
-    timestamps:false
-  },
+  
   pool: {
     max: 5,
     min: 0,
