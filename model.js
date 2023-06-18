@@ -1,6 +1,27 @@
 const { sq } = require("./db");
 const { DataTypes } = require("sequelize");
-const Post = sq.define("paranoid", {
+
+const Image = sq.define("Image" , {
+  
+    title: DataTypes.STRING,
+    url: DataTypes.STRING
+  }
+)
+
+
+const Video = sq.define("Video" , {
+  
+  title: DataTypes.STRING,
+  text: DataTypes.STRING
+}
+)
+
+const Comment = sq.define("comment" , {
+  title: DataTypes.STRING,
+  commentableId: DataTypes.INTEGER,
+  commentableType: DataTypes.STRING
+})
+/**const Post = sq.define("paranoid", {
   title: {
     type: DataTypes.STRING,
   },
@@ -18,7 +39,7 @@ const Post = sq.define("paranoid", {
 },
 );
 
-/**const Tag = sq.define("tag", {
+const Tag = sq.define("tag", {
   name: {
     type: DataTypes.STRING,
   }
@@ -27,5 +48,9 @@ const Post = sq.define("paranoid", {
 
 sq.sync({alter:true})
 
-module.exports = Post;
+
+module.exports = Image;
+module.exports = Video;
+module.exports = Comment;
+//module.exports = Post;
 //module.exports = Tag;

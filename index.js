@@ -1,10 +1,38 @@
 const { json } = require("body-parser");
 const express = require("express");
-const Post = require("./model");
+//const Post = require("./model");
+const { Sequelize, DataTypes } = require("sequelize");
 //const Tag = require("./model");
+const Image = require('./model')
+const Video = require('./model')
+const Comment = require('./model')
 const app = express();
 app.use(express.json());
 
+Image.hasMany(Comment , {
+  foreignKey: 'commentableId',
+  constraints:false,
+  scope:{
+    commenttableType:'image'
+  }
+})
+
+Video.hasMany(Comment , {
+  constraints:false,
+  scope:{
+    commenttableType:'video'
+  }
+})
+
+Comment.belongsTo(Image , {
+  constraints:false,
+   foreignKey: 'commentableId' 
+})
+
+Comment.belongsTo(Video , {
+    constraints:false,
+    foreignKey: 'commentableId' 
+})
 
 /**Tag.belongsToMany(Post, {
   through: "post_tag",
@@ -35,7 +63,7 @@ app.get("/data", async (req, res) => {
   } catch (error) {
     console.log(error.message);
   }
-});**/
+});
 
 app.post("/create", async (req, res) => {
   try {
@@ -81,10 +109,32 @@ app.delete("/remove", async (req, res) => {
     console.log(error.message);
   }
 });
+  
 
+const queryInterface = Sequelize.getQueryInterface();
+var queryInterfaceData = async(req,res)=>{
 
+  queryInterface.createTable('table',{
+    name:DataTypes.STRING
+  })
 
+}
 
+**/
+
+app.get('/poly' , async(req,res)=>{
+  try {
+    let data = await Image.findAll({
+      include:[{
+        model:Comment
+      }]
+    })
+    res.status(200).json(data);
+  } catch (error) {
+    console.log(error.message);
+  }
+
+})
 app.listen(8080, () => {
     console.log("server running");
   });
